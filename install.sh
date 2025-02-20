@@ -100,7 +100,7 @@ done
 echo -e "${NC}"
 
 # Create the config file
-sudo bash -c "cat > daemon/resource/config/device-monitor.conf <<EOL
+sudo bash -c "cat > /etc/device-monitor/device-monitor.conf <<EOL
 # Configuration file for Device Monitor
 SNMP_VERSION=\"SNMP_VERSION_1\"
 COMMUNITY=\"public\"
@@ -110,12 +110,12 @@ DEVICE_IPS = [
 EOL"
 
 for ip in "${DEVICE_IPS[@]}"; do
-    sudo bash -c "echo \"    \\\"$ip\\\",\" >> daemon/resource/config/device-monitor.conf"
+    sudo bash -c "echo \"    \\\"$ip\\\",\" >> /etc/device-monitor/device-monitor.conf"
 done
 
 # Remove the last comma and close the array
-sudo sed -i '$ s/,$//' daemon/resource/config/device-monitor.conf
-sudo bash -c "cat >> daemon/resource/config/device-monitor.conf <<EOL
+sudo sed -i '$ s/,$//' /etc/device-monitor/device-monitor.conf
+sudo bash -c "cat >> /etc/device-monitor/device-monitor.conf <<EOL
 ];
 EOL"
 
@@ -125,7 +125,19 @@ EOL"
 #make
 #sudo make install
 
-
+case $OS in
+        ubuntu|debian)
+            sudo cp ubuntu/device-monitor.service /usr/bin/
+            ;;
+        fedora)
+            #sudo dnf update -y > /dev/null 2>&1
+            #sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake > /dev/null 2>&1
+            ;;
+        *)
+            echo -e "${RED}Unsupported operating system: $OS${NC}"
+            exit 1
+            ;;
+    esac
 
 sudo systemctl daemon-reload
 sudo systemctl enable device-monitor.service
