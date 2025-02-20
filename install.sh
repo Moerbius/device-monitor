@@ -39,11 +39,11 @@ install_prerequisites() {
     case $OS in
         ubuntu|debian)
             sudo apt-get update > /dev/null 2>&1
-            sudo apt-get install -y build-essential libssl-dev libcurl4-openssl-dev git libsnmp-dev libconfig++-dev cmake > /dev/null 2>&1
+            sudo apt-get install -y build-essential libssl-dev libcurl4-openssl-dev git libsnmp-dev libconfig++-dev > /dev/null 2>&1
             ;;
         fedora)
             sudo dnf update -y > /dev/null 2>&1
-            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake > /dev/null 2>&1
+            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel > /dev/null 2>&1
             ;;
         *)
             echo -e "${RED}Unsupported operating system: $OS${NC}"
@@ -119,19 +119,21 @@ sudo bash -c "cat >> /etc/device-monitor/device-monitor.conf <<EOL
 ];
 EOL"
 
-#mkdir -p "build"
-#cd build
-#cmake ..
-#make
-#sudo make install
-
 case $OS in
         ubuntu|debian)
             sudo cp ubuntu/device-monitor /usr/bin/
+            
+            sudo systemctl daemon-reload
+            sudo systemctl enable device-monitor.service
+            sudo systemctl start device-monitor.service
+
+            sudo systemctl status device-monitor.service
+            ;;
+        debian)
+
             ;;
         fedora)
-            #sudo dnf update -y > /dev/null 2>&1
-            #sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake > /dev/null 2>&1
+            
             ;;
         *)
             echo -e "${RED}Unsupported operating system: $OS${NC}"
@@ -139,10 +141,6 @@ case $OS in
             ;;
     esac
 
-sudo systemctl daemon-reload
-sudo systemctl enable device-monitor.service
-sudo systemctl start device-monitor.service
 
-sudo systemctl status device-monitor.service
 
 echo -e "${GREEN}Installation complete. Device Monitor service is now running.${NC}"
