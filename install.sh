@@ -127,7 +127,7 @@ EOL"
 
 case $OS in
         ubuntu|debian)
-            sudo cp ubuntu/device-monitor.service /usr/bin/
+            sudo cp ubuntu/device-monitor /usr/bin/
             ;;
         fedora)
             #sudo dnf update -y > /dev/null 2>&1
