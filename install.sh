@@ -39,11 +39,11 @@ install_prerequisites() {
     case $OS in
         ubuntu|debian)
             sudo apt-get update > /dev/null 2>&1
-            sudo apt-get install -y build-essential libssl-dev libcurl4-openssl-dev git libsnmp-dev libconfig++-dev > /dev/null 2>&1
+            sudo apt-get install -y build-essential libssl-dev libcurl4-openssl-dev git libsnmp-dev libconfig++-dev cmake > /dev/null 2>&1
             ;;
         fedora)
             sudo dnf update -y > /dev/null 2>&1
-            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel > /dev/null 2>&1
+            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake > /dev/null 2>&1
             ;;
         *)
             echo -e "${RED}Unsupported operating system: $OS${NC}"
