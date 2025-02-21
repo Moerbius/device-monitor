@@ -43,7 +43,7 @@ install_prerequisites() {
             ;;
         fedora)
             sudo dnf update -y > /dev/null 2>&1
-            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake > /dev/null 2>&1
+            sudo dnf install -y @development-tools openssl-devel libcurl-devel git net-snmp-devel libconfig-devel cmake gcc-c++ > /dev/null 2>&1
             ;;
         *)
             echo -e "${RED}Unsupported operating system: $OS${NC}"
